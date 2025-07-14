@@ -16,32 +16,32 @@ Este repositório tem como objetivo a resolução de exercícios sobre Programa�
 
 |Exercício | Dificuldade |
 | -- | -- |
-|[]()|🔴 Difícil|
-|[]()|🔴 Difícil|
-|[]()|🔴 Difícil|
+|[115](https://leetcode.com/problems/distinct-subsequences/description/)|🔴 Difícil|
+|[123](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/)|🔴 Difícil|
+|[140](https://leetcode.com/problems/word-break-ii/description/)|🔴 Difícil|
 
 ## Screenshots
 
-### Exercício 1 - []()
+### Exercício 1 - [Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/description/)
 
-![]()
+![](prints/115.png)
 - Dificuldade: 🔴 Difícil <br>
-- Problema: []() <br>
-- [Resposta]() <br>
+- Problema: [115](https://leetcode.com/problems/distinct-subsequences/description/) <br>
+- [Resposta](questoes/leetcode_115.cpp) <br>
 
-### Exerício 2 - []()
+### Exerício 2 - [Best Time to Buy and Sell Stock III](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/)
 
-![]()
+![](prints/123.png)
 - Dificuldade: 🔴 Difícil <br>
-- Problema: []() <br>
-- [Resposta]() <br>
+- Problema: [123](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/) <br>
+- [Resposta](questoes/leetcode_123.cpp) <br>
 
-### Exercício 3 - []()
+### Exercício 3 - [Word Break II](https://leetcode.com/problems/word-break-ii/description/)
 
-![]()
+![](prints/140.png)
 - Dificuldade: 🔴 Difícil <br>
-- Problema: []() <br>
-- [Resposta]() <br>
+- Problema: [140](https://leetcode.com/problems/word-break-ii/description/) <br>
+- [Resposta](questoes/leetcode_140.cpp) <br>
 
 ## Instalação 
 **Linguagem**: C++
