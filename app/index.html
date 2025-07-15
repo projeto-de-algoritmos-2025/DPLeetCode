@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alinhamento de Sequências Genéticas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a5568;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .input-group:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        .parameters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .param-group {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .param-group:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .algorithm-steps {
+            margin-bottom: 30px;
+        }
+
+        .step {
+            background: #f8fafc;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .step h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .matrix-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .matrix {
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .matrix td, .matrix th {
+            padding: 8px 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .matrix th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .matrix .current-cell {
+            background: #ffd700 !important;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .matrix .path-cell {
+            background: #90ee90 !important;
+            color: #333;
+        }
+
+        .result {
+            background: #e6fffa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #38b2ac;
+            margin-top: 20px;
+        }
+
+        .result h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .alignment {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            line-height: 1.6;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #bee3f8;
+            margin: 10px 0;
+        }
+
+        .cost {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-top: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .parameters {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 Alinhamento de Sequências Genéticas - Programação Dinâmica</h1>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label for="seq1">Sequência 1:</label>
+                <textarea id="seq1" placeholder="Ex: ATCG">ATCG</textarea>
+            </div>
+            <div class="input-group">
+                <label for="seq2">Sequência 2:</label>
+                <textarea id="seq2" placeholder="Ex: AGTC">AGTC</textarea>
+            </div>
+        </div>
+
+        <div class="parameters">
+            <div class="param-group">
+                <label for="gapX">Gap em X:</label>
+                <input type="number" id="gapX" value="2" min="0">
+            </div>
+            <div class="param-group">
+                <label for="gapY">Gap em Y:</label>
+                <input type="number" id="gapY" value="2" min="0">
+            </div>
+            <div class="param-group">
+                <label for="mismatch">Mismatch:</label>
+                <input type="number" id="mismatch" value="3" min="0">
+            </div>
+        </div>
+
+        <button onclick="runAlignment()">🚀 Executar Alinhamento</button>
+
+        <div id="steps" class="algorithm-steps"></div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let matrix = [];
+        let path = [];
+
+        function runAlignment() {
+            const seq1 = document.getElementById('seq1').value.toUpperCase().trim();
+            const seq2 = document.getElementById('seq2').value.toUpperCase().trim();
+            const gapX = parseInt(document.getElementById('gapX').value);
+            const gapY = parseInt(document.getElementById('gapY').value);
+            const mismatch = parseInt(document.getElementById('mismatch').value);
+
+            if (!seq1 || !seq2) {
+                alert('Por favor, insira ambas as sequências.');
+                return;
+            }
+
+            document.getElementById('steps').innerHTML = '<div class="loading">Executando algoritmo...</div>';
+            document.getElementById('result').innerHTML = '';
+
+            setTimeout(() => {
+                executeNeedlemanWunsch(seq1, seq2, gapX, gapY, mismatch);
+            }, 100);
+        }
+
+        function executeNeedlemanWunsch(seq1, seq2, gapX, gapY, mismatch) {
+            const m = seq1.length;
+            const n = seq2.length;
+            matrix = Array(m + 1).fill().map(() => Array(n + 1).fill(0));
+            
+            let steps = [];
+            
+            steps.push({
+                title: "Passo 1: Inicialização da Matriz",
+                description: `Criando matriz ${m+1} x ${n+1} e preenchendo primeira linha e coluna com penalidades de gap.`,
+                matrix: JSON.parse(JSON.stringify(matrix))
+            });
+
+            for (let i = 0; i <= m; i++) {
+                matrix[i][0] = i * gapY;
+            }
+            for (let j = 0; j <= n; j++) {
+                matrix[0][j] = j * gapX;
+            }
+
+            steps.push({
+                title: "Passo 2: Matriz Inicializada",
+                description: "Primeira linha e coluna preenchidas com custos de gaps.",
+                matrix: JSON.parse(JSON.stringify(matrix))
+            });
+
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    const match = seq1[i-1] === seq2[j-1] ? 0 : mismatch;
+                    const diagonal = matrix[i-1][j-1] + match;
+                    const up = matrix[i-1][j] + gapY;
+                    const left = matrix[i][j-1] + gapX;
+                    
+                    matrix[i][j] = Math.min(diagonal, up, left);
+                    
+                    steps.push({
+                        title: `Passo ${steps.length + 1}: Calculando célula [${i}][${j}]`,
+                        description: `Comparando '${seq1[i-1]}' com '${seq2[j-1]}':<br>
+                        - Diagonal: ${matrix[i-1][j-1]} + ${match} = ${diagonal}<br>
+                        - Cima: ${matrix[i-1][j]} + ${gapY} = ${up}<br>
+                        - Esquerda: ${matrix[i][j-1]} + ${gapX} = ${left}<br>
+                        - Mínimo: ${matrix[i][j]}`,
+                        matrix: JSON.parse(JSON.stringify(matrix)),
+                        currentCell: [i, j]
+                    });
+                }
+            }
+
+            const alignment = traceback(seq1, seq2, matrix, gapX, gapY, mismatch);
+            
+            steps.push({
+                title: "Passo Final: Traceback",
+                description: "Encontrando o caminho ótimo através da matriz (células em verde).",
+                matrix: JSON.parse(JSON.stringify(matrix)),
+                path: path
+            });
+
+            displaySteps(steps, seq1, seq2, alignment, matrix[m][n]);
+        }
+
+        function traceback(seq1, seq2, matrix, gapX, gapY, mismatch) {
+            let i = seq1.length;
+            let j = seq2.length;
+            let align1 = '';
+            let align2 = '';
+            path = [];
+
+            while (i > 0 || j > 0) {
+                path.push([i, j]);
+                
+                if (i > 0 && j > 0) {
+                    const match = seq1[i-1] === seq2[j-1] ? 0 : mismatch;
+                    const diagonal = matrix[i-1][j-1] + match;
+                    const up = matrix[i-1][j] + gapY;
+                    const left = matrix[i][j-1] + gapX;
+                    
+                    if (matrix[i][j] === diagonal) {
+                        align1 = seq1[i-1] + align1;
+                        align2 = seq2[j-1] + align2;
+                        i--;
+                        j--;
+                    } else if (matrix[i][j] === up) {
+                        align1 = seq1[i-1] + align1;
+                        align2 = '-' + align2;
+                        i--;
+                    } else {
+                        align1 = '-' + align1;
+                        align2 = seq2[j-1] + align2;
+                        j--;
+                    }
+                } else if (i > 0) {
+                    align1 = seq1[i-1] + align1;
+                    align2 = '-' + align2;
+                    i--;
+                } else {
+                    align1 = '-' + align1;
+                    align2 = seq2[j-1] + align2;
+                    j--;
+                }
+            }
+
+            return { align1, align2 };
+        }
+
+        function displaySteps(steps, seq1, seq2, alignment, cost) {
+            const stepsContainer = document.getElementById('steps');
+            stepsContainer.innerHTML = '';
+
+            steps.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step';
+                stepDiv.innerHTML = `
+                    <h3>${step.title}</h3>
+                    <p>${step.description}</p>
+                    ${createMatrixHTML(step.matrix, seq1, seq2, step.currentCell, step.path)}
+                `;
+                stepsContainer.appendChild(stepDiv);
+            });
+
+            // Resultado final
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="result">
+                    <h3>🎯 Resultado Final</h3>
+                    <div class="alignment">
+                        <div>Sequência 1: ${alignment.align1}</div>
+                        <div>Sequência 2: ${alignment.align2}</div>
+                        <div>Símbolos:     ${createSymbolLine(alignment.align1, alignment.align2)}</div>
+                    </div>
+                    <div class="cost">💰 Custo Total: ${cost}</div>
+                </div>
+            `;
+        }
+
+        function createMatrixHTML(matrix, seq1, seq2, currentCell, path) {
+            let html = '<div class="matrix-container"><table class="matrix">';
+            
+            html += '<tr><th></th><th>-</th>';
+            for (let j = 0; j < seq2.length; j++) {
+                html += `<th>${seq2[j]}</th>`;
+            }
+            html += '</tr>';
+
+            for (let i = 0; i <= seq1.length; i++) {
+                html += '<tr>';
+                html += i === 0 ? '<th>-</th>' : `<th>${seq1[i-1]}</th>`;
+                
+                for (let j = 0; j <= seq2.length; j++) {
+                    let cellClass = '';
+                    if (currentCell && currentCell[0] === i && currentCell[1] === j) {
+                        cellClass = 'current-cell';
+                    } else if (path && path.some(p => p[0] === i && p[1] === j)) {
+                        cellClass = 'path-cell';
+                    }
+                    
+                    html += `<td class="${cellClass}">${matrix[i][j]}</td>`;
+                }
+                html += '</tr>';
+            }
+            
+            html += '</table></div>';
+            return html;
+        }
+
+        function createSymbolLine(align1, align2) {
+            let symbols = '';
+            for (let i = 0; i < align1.length; i++) {
+                if (align1[i] === align2[i]) {
+                    symbols += '✅';
+                } else if (align1[i] === '-' || align2[i] === '-') {
+                    symbols += '⬜';
+                } else {
+                    symbols += '〰️';
+                }
+            }
+            return symbols;
+        }
+
+        window.onload = function() {
+            runAlignment();
+        };
+    </script>
+</body>
+</html>
