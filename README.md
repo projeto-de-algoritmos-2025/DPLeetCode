@@ -3,7 +3,7 @@
 
 - **Número da Lista**: 5 <br>
 - **Conteúdo da Disciplina**: Dynamic Programming <br>
-- [**Vídeo da Apresentação**]() <br>
+- [**Vídeo da Apresentação**](https://youtu.be/1LTV8UyuReY) <br>
 
 ## Alunos
 |Matrícula | Aluno |GitHub|
@@ -76,4 +76,4 @@ Para cada código, deve-se:
 - 8: Clicar em ```Submit``` para receber o resultado de aprovação do código.
   
 ## Vídeo da Apresentação
-Acesse o vídeo de explicação das resoluções [clicando aqui]().
+Acesse o vídeo de explicação das resoluções [clicando aqui](https://youtu.be/1LTV8UyuReY).
